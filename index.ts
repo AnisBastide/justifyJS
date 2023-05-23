@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken'
+import justify from "./justify";
 
 dotenv.config();
 
@@ -24,7 +25,8 @@ app.post('/api/login',jsonParser,(req: Request<{email:string}>, res: Response) =
 app.post('/api/justify',jsonParser,(req: Request<{token:string,text:string}>, res: Response) => {
    const decoded = jwt.verify(req.body.token,secretToken)
     if(decoded){
-        res.send(req.body.text);
+        const justified = justify(req.body.text,80)
+        res.send(justified);
     }
 })
 app.listen(port, () => {
